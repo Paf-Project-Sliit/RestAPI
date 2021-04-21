@@ -1,4 +1,4 @@
-package model;
+package com.gadgetbadget.restapi.Entity;
 
 import java.sql.*;
 
