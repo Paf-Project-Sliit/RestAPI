@@ -17,11 +17,10 @@ import org.jsoup.nodes.Document;
 
 @Path("/Customers")
 public class CustomerService {
-	
-	Customer customerObj = new Customer(); 
+Customer customerObj = new Customer(); 
 	
 	@GET
-	@Path("/") 
+	@Path("/view") 
 	@Produces(MediaType.TEXT_HTML) 
 	public String readCustomers() 
 	 { 
@@ -34,11 +33,12 @@ public class CustomerService {
 	@Produces(MediaType.TEXT_PLAIN) 
 	public String insertCustomer(@FormParam("customerName") String customerName, 
 	 @FormParam("customerAge") int customerAge, 
-	 @FormParam("customerAddress") String customerAddress) 
-	{ 
-	 String output = customerObj.insertCustomer(customerName, customerAge, customerAddress); 
-	return output; 
-	}
+	 @FormParam("customerAddress") String customerAddress,
+	 @FormParam("customerEmail") String customerEmail) 
+	{
+		 String output = customerObj.insertCustomer(customerName, customerAge, customerAddress, customerEmail); 
+			return output; 
+			}
 	
 	@PUT
 	@Path("/update") 
@@ -53,10 +53,12 @@ public class CustomerService {
 	 String customerName = customerObject.get("customerName").getAsString(); 
 	 String customerAge = customerObject.get("customerAge").getAsString(); 
 	 String customerAddress = customerObject.get("customerAddress").getAsString(); 
-	 String output = customerObj.updateCustomer(customerID,customerName, customerAge, customerAddress); 
-	return output; 
-	}
-	
+	 String customerEmail = customerObject.get("customerEmail").getAsString(); 
+	 
+	 String output = customerObj.updateCustomer(customerID,customerName, customerAge, customerAddress, customerEmail); 
+		return output; 
+		}
+		
 	@DELETE
 	@Path("/delete") 
 	@Consumes(MediaType.APPLICATION_XML) 
@@ -66,10 +68,9 @@ public class CustomerService {
 	//Convert the input string to an XML document
 	 Document doc = Jsoup.parse(customerData, "", Parser.xmlParser()); 
 	 
-	//Read the value from the element <itemID>
+	//Read the value from the element <customerID>
 	 String customerID = doc.select("customerID").text(); 
 	 String output = customerObj.deleteCustomer(customerID); 
 	return output; 
 	}
-
 }
